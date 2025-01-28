@@ -1,0 +1,61 @@
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #f4f4f9;
+    font-family: Arial, sans-serif;
+    justify-content: flex-start;
+}
+
+.answer {
+    display: none; /* Réponse cachée par défaut */
+    margin-top: 10px;
+    margin-bottom: 10px;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    min-height: 100spx; /* Toujours un minimum d'espace réservé même lorsque la réponse est cachée */
+    max-width: 800px; /* Limite la largeur du conteneur */
+    padding: 10px;
+}
+
+h1 {
+    margin-top: 20px; /* Marge du haut pour le titre */
+    margin-bottom: 40px; /* Espacement sous le titre */
+    color: #0056b3;
+}
+
+h2 {
+    font-size: 18px;
+    line-height: 1.8;
+    max-width: 800px;
+    text-align: justify;
+    margin: 0;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(31, 31, 31, 0.1);
+}
+
+form {
+    margin-bottom: 20px; /* Marge entre les formulaires */
+}
+
+button {
+    margin: 10px 0;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 30px 70px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
