@@ -70,10 +70,10 @@ const int dirFrontLeft = 12;  // Direction pour roue avant gauche
 //servo
 Servo myServo;
 int servoPin = 26;  // Pin sur lequel est connecté le servo
-int iReqValue = 0;  // Position fixe du servo, remplace par la valeur souhaitée
-int iReqPos = 0;
-const char STX = 0x02;  // Start of text
-const char ETX = 0x03;  // End of text
+// Position fixe du servo, remplace par la valeur souhaitée
+int pos = 28;
+//const char STX = 0x02;  // Start of text
+//const char ETX = 0x03;  // End of text
 
 
 //ultrason 
@@ -81,7 +81,7 @@ const int proximityFront = A6;  // Capteur avant
 
 //variable distance
 const int detectionDistance = 20;
-int distance = 0;
+int distance = 100;
 
 int vm1 = 40;
 int vm2 = 40;
@@ -95,7 +95,6 @@ const int GO_FORWARD= 50; // serial terminal = 2
 const int GO_BACKWARD= 51; // serial terminal = 3
 const int GO_TURNRIGHT= 52; // serial terminal = 4
 const int GO_TURNLEFT= 53; // serial terminal = 5
-const int GO_TAB = 115; //serial terminal = s
 const int UP_TAB = 117; //serial terminal = u
 const int DOWN_TAB = 100; //serial terminal = d
 
@@ -105,93 +104,6 @@ const long interval = 3000;        // Intervalle de 3 secondes (en millisecondes
 
 //variable bluetooth
 char c = 0;
-
-void setup() {
-  myServo.attach(servoPin);
-
-  // Initialisation de la communication série avec le module Bluetooth (via Serial1 sur pins RX1 et TX1)
-  //Serial1.begin(9600);
-  Serial.begin(9600);
-
-  // Message d'initialisation
-  //Serial.println("Module Bluetooth prêt");
-
-// Configuration
-  pinMode(pwmFrontRight, OUTPUT);
-  pinMode(dirFrontRight, OUTPUT);
-  pinMode(pwmBackRight, OUTPUT);
-  pinMode(dirBackRight, OUTPUT);
-  pinMode(pwmBackLeft, OUTPUT);
-  pinMode(dirBackLeft, OUTPUT);
-  pinMode(pwmFrontLeft, OUTPUT);
-  pinMode(dirFrontLeft, OUTPUT);
-
-  pinMode(proximityFront, INPUT);  
-
-}
-
-void loop() {
-
-  byCmd = Serial.read();
-  if (byCmd != -1) {
-    Serial.println(byCmd);
-  }
-
-  // Mesurer la distance avec le capteur de proximité avant
-  distance = analogRead(proximityFront);
-  distance = map(distance, 0, 1023, 0, 100);
-
-  // Obtenir le temps actuel
-  unsigned long currentMillis = millis();
-
-  // Si 3 secondes se sont écoulées, afficher les informations et mettre à jour `previousMillis`
-  if (currentMillis - previousMillis >= interval) {
-    previousMillis = currentMillis;
-
-    // Afficher la valeur du capteur et la distance mesurée toutes les 3 secondes
-    Serial.print("Front sensor value: ");
-    Serial.println(analogRead(proximityFront));
-    Serial.print("Distance (cm): ");
-    Serial.println(distance);
-
-    // Vérifier si un obstacle est détecté et afficher le message
-    if (distance <= detectionDistance) {
-      Serial.println("Obstacle détecté");
-    }
-  }
-
-  // Exécuter les commandes et mouvements en fonction de la distance et des commandes reçues
-  if (distance > detectionDistance) {
-    switch(byCmd) {
-      case STOP:
-        stopMotors();
-        break;
-      case GO_FORWARD:
-        moveForeward();
-        break;
-      case GO_BACKWARD:
-        moveBackward();
-        break;
-      case GO_TURNLEFT:
-        turnLeft();
-        break;
-      case GO_TURNRIGHT:
-        turnRight();
-        break;
-      case GO_TAB:
-        moveServo(iReqValue);
-        break;
-      case UP_TAB:
-        servoUp();
-        break;
-    }
-  } else {
-    stopMotors(); // Stopper les moteurs immédiatement si un obstacle est détecté
-  }
-
-  delay(100);
-  byCmd = STOP;  // Remet la commande par défaut à STOP
-}
 
 void moveForeward(){
 
@@ -248,30 +160,101 @@ void stopMotors() {
   analogWrite(pwmFrontLeft, 0);   
 }
 
-void moveServo(int iReqPos)
-{
-  myServo.write(iReqPos);  // Envoie la position souhaitée
-}
-
-  void servoUp() {
-  if (iReqPos < 180) {
-    iReqPos= 160;
-    Serial.print("iReqPos: ");  // Affiche la position actuelle
-    Serial.println(iReqPos);
-    myServo.write(iReqPos);
+void servoUp() {
+  if (pos <= 90) {
+    pos++;
+    Serial.print("Position: ");
+    Serial.println(pos);
+    myServo.write(pos);
+    delay(15);
   }
 }
 
 void servoDown() {
-  if (iReqPos > 0) {
-    iReqPos=10;  // Décrémente la position pour descendre
-    myServo.write(iReqPos);  // Applique la nouvelle position au servo
-    Serial.print("iReqPos: ");  // Affiche la position actuelle
-    Serial.println(iReqPos);
-    myServo.write(iReqPos);
+  if (pos >= 0) {
+    pos--;
+    Serial.print("Position: ");
+    Serial.println(pos);
+    myServo.write(pos);
+    delay(15);
   }
 
 }
+
+void setup() {
+  // Configuration
+  pinMode(pwmFrontRight, OUTPUT);
+  pinMode(dirFrontRight, OUTPUT);
+  pinMode(pwmBackRight, OUTPUT);
+  pinMode(dirBackRight, OUTPUT);
+  pinMode(pwmBackLeft, OUTPUT);
+  pinMode(dirBackLeft, OUTPUT);
+  pinMode(pwmFrontLeft, OUTPUT);
+  pinMode(dirFrontLeft, OUTPUT);
+
+  pinMode(proximityFront, INPUT);  
+  myServo.attach(servoPin);
+  myServo.write(pos); // Set the servo to the starting position
+  delay(500);  
+  // Initialisation de la communication série avec le module Bluetooth (via Serial1 sur pins RX1 et TX1)
+  //Serial1.begin(9600);
+  Serial.begin(9600);
+
+  // Message d'initialisation
+  //Serial.println("Module Bluetooth prêt")
+
+}
+
+void loop() {
+
+  byCmd = Serial.read();
+  if (byCmd != -1) {
+    Serial.println(byCmd);
+  }
+
+  // Mesurer la distance avec le capteur de proximité avant
+  distance = analogRead(proximityFront);
+  distance = map(distance, 0, 1023, 0, 100);
+
+  // Obtenir le temps actuel
+  unsigned long currentMillis = millis();
+
+  // Exécuter les commandes et mouvements en fonction de la distance et des commandes reçues
+  switch(byCmd) {
+    case STOP:
+      stopMotors();
+      break;
+    case GO_FORWARD:
+      moveForeward();
+      break;
+    case GO_BACKWARD:
+      moveBackward();
+      break;
+    case GO_TURNLEFT:
+      turnLeft();
+      break;
+    case GO_TURNRIGHT:
+      turnRight();
+      break;
+    case UP_TAB:
+      servoUp();
+      break;
+    case DOWN_TAB:
+      servoDown();
+      break;
+    }
+
+    // Increment position and print value
+  
+  
+  // Decrement position and print value
+  
+
+  delay(100);
+  byCmd = STOP;  // Remet la commande par défaut à STOP
+}
+
+
 
 
 
