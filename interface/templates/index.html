@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- css -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    <title>Accueil</title>
+</head>
+<body>
+    <h1>Bienvenue !</h1>
+    <form action="{{ url_for('action') }}" method="get">
+        <button type="submit">Présentation</button>
+    </form>
+    <form action="{{ url_for('who') }}" method="get">
+        <button type="submit">Qui suis-je ?</button>
+    </form>
+    <form action="{{ url_for('move') }}" method="get">
+        <button type="submit">Mouvement</button>
+    </form>
+    <form action="{{ url_for('game') }}" method="get">
+        <button type="submit">Jeu</button>
+    </form>
+    
+</body>
+</html>

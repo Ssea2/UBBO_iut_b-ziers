@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Qui suis je ?</title>
+</head>
+<body>
+    <h1>Qui suis je ?</h1>
+    <h2 class="typing-text"></h2>
+    <form action="{{ url_for('home') }}" method="get">
+        <button type="submit">retour</button>
+    </form>
+
+    <script>
+        // Le texte à animer
+        const presentationText = "Bonjour à tous, je suis UBBO, un robot conçu dans le cadre d'un projet de la filière Robotique et Intelligence Artificielle, ou ROBIA. Je suis le fruit de l'innovation et des connaissances acquises grâce aux étudiants et chercheurs en ROBIA. Mon objectif est de vous présenter les nombreux bienfaits de la robotique et de l'intelligence artificielle. Ces technologies permettent de résoudre des problèmes complexes, d'automatiser des tâches, et de créer des systèmes intelligents qui interagissent avec leur environnement. À travers mon fonctionnement, je démontre comment la ROBIA peut améliorer l'efficacité dans divers domaines, de l'industrie à la vie quotidienne. Je suis une illustration concrète des compétences et des projets réalisés par la communauté ROBIA pour façonner un avenir où l'humain et la machine travaillent ensemble au service de l'innovation.";
+
+        function typeText(element, text, speed = 30) {
+            let index = 0;
+            element.textContent = '';
+            
+            function type() {
+                if (index < text.length) {
+                    element.textContent += text.charAt(index);
+                    index++;
+                    setTimeout(type, speed);
+                }
+            }
+            
+            type();
+        }
+
+        // Lancer l'animation dès que la page est chargée
+        window.addEventListener('load', () => {
+            const textElement = document.querySelector('.typing-text');
+            typeText(textElement, presentationText);
+        });
+    </script>
+</body>
+</html>
