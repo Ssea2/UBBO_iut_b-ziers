@@ -17,6 +17,11 @@ def action():
 def who():
     return render_template('qsj.html')
 
+
+@app.route('/move')
+def move():
+    return render_template('move.html')
+
 # Route pour la page du jeu
 @app.route('/game')
 def game():
