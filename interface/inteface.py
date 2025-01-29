@@ -94,7 +94,7 @@ def get_best_move(board, player):
     return random.choice(empty_cells) if empty_cells else None
 
 # if __name__ == '__main__':
-#     app.run(host='10.216.0.76', port=5000, debug=True, threaded=False)
+#     app.run(host='192.168.42.10', port=5000, debug=True, threaded=False)
 
 app.run(debug=True, port=5001)
 
