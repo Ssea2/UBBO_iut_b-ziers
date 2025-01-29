@@ -22,5 +22,8 @@ def who():
 def game():
     return render_template('jeu.html')
 
-if __name__ == '__main__':
-    app.run(host='10.216.0.108', port=5000, debug=True, threaded=False)
+# if __name__ == '__main__':
+#     app.run(host='10.216.0.76', port=5000, debug=True, threaded=False)
+
+app.run(debug=True, port=5001)
+

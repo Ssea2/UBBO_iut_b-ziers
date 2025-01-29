@@ -10,20 +10,26 @@ body {
 }
 
 .answer {
-    display: none; /* Réponse cachée par défaut */
+    display: none;
     margin-top: 10px;
     margin-bottom: 10px;
     background-color: #f9f9f9;
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    min-height: 100spx; /* Toujours un minimum d'espace réservé même lorsque la réponse est cachée */
-    max-width: 800px; /* Limite la largeur du conteneur */
+    min-height: 100px;
+    max-width: 800px;
     padding: 10px;
 }
 
+.typing-text {
+    white-space: pre-wrap;
+    margin: 0;
+    line-height: 1.5;
+}
+
 h1 {
-    margin-top: 20px; /* Marge du haut pour le titre */
-    margin-bottom: 40px; /* Espacement sous le titre */
+    margin-top: 20px;
+    margin-bottom: 40px;
     color: #0056b3;
 }
 
@@ -40,7 +46,7 @@ h2 {
 }
 
 form {
-    margin-bottom: 20px; /* Marge entre les formulaires */
+    margin-bottom: 20px;
 }
 
 button {

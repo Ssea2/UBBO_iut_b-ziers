@@ -3,9 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- css -->
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-
     <title>Présentation</title>
 </head>
 <body>
@@ -13,30 +11,27 @@
     
     <button onclick="toggleAnswer('programContent')">Quel est le contenu du programme sur les 3 années de formation ?</button>
     <div id="programContent" class="answer">
-        <p>Le programme sur les trois années de formation inclut des modules sur l'IT 
-            (Python, IA, Traitement d'image...) et OT (Automatisme, Instrumentation, Robotique...). 
-             Chaque année, les étudiants développent leurs compétences à travers des cours théoriques et 
-             des applications concrètes.</p>
+        <p class="typing-text"></p>
     </div>
 
     <button onclick="toggleAnswer('prerequisites')">Quels sont les prérequis pour intégrer la formation ?</button>
     <div id="prerequisites" class="answer">
-        <p>Les prérequis incluent une bonne maîtrise des mathématiques, des connaissances en programmation et un intérêt pour les technologies innovantes. Un diplôme de niveau Bac est nécessaire pour l'admission.</p>
+        <p class="typing-text"></p>
     </div>
 
     <button onclick="toggleAnswer('careerOpportunities')">Quels sont les débouchés professionnels après l'obtention du diplôme ?</button>
     <div id="careerOpportunities" class="answer">
-        <p>Les diplômés peuvent travailler dans des domaines tels que la robotique industrielle, l'intelligence artificielle, Automaticien...</p>
+        <p class="typing-text"></p>
     </div>
 
     <button onclick="toggleAnswer('alternance')">Est-il possible de suivre la formation en alternance ?</button>
     <div id="alternance" class="answer">
-        <p>Oui, il est possible de suivre la formation en alternance à partir de la 2eme année, permettant aux étudiants de combiner théorie et pratique dans un environnement professionnel.</p>
+        <p class="typing-text"></p>
     </div>
 
     <button onclick="toggleAnswer('evaluationMethods')">Quelles sont les modalités d'évaluation (contrôle continu, examens) ?</button>
     <div id="evaluationMethods" class="answer">
-        <p>Les évaluations incluent des projets de groupe, et des contrôles continus sur la base des compétences acquises au cours des modules.</p>
+        <p class="typing-text"></p>
     </div>
 
     <form action="{{ url_for('home') }}" method="get">
@@ -44,16 +39,41 @@
     </form>
 
     <script>
-        // Fonction pour afficher/masquer les réponses
+        const answers = {
+            'programContent': "Le programme sur les trois années de formation inclut des modules sur l'IT (Python, IA, Traitement d'image...) et OT (Automatisme, Instrumentation, Robotique...). Chaque année, les étudiants développent leurs compétences à travers des cours théoriques et des applications concrètes.",
+            'prerequisites': "Les prérequis incluent une bonne maîtrise des mathématiques, des connaissances en programmation et un intérêt pour les technologies innovantes. Un diplôme de niveau Bac est nécessaire pour l'admission.",
+            'careerOpportunities': "Les diplômés peuvent travailler dans des domaines tels que la robotique industrielle, l'intelligence artificielle, Automaticien...",
+            'alternance': "Oui, il est possible de suivre la formation en alternance à partir de la 2eme année, permettant aux étudiants de combiner théorie et pratique dans un environnement professionnel.",
+            'evaluationMethods': "Les évaluations incluent des projets de groupe, et des contrôles continus sur la base des compétences acquises au cours des modules."
+        };
+
+        function typeText(element, text, speed = 30) {
+            let index = 0;
+            element.textContent = '';
+            
+            function type() {
+                if (index < text.length) {
+                    element.textContent += text.charAt(index);
+                    index++;
+                    setTimeout(type, speed);
+                }
+            }
+            
+            type();
+        }
+
         function toggleAnswer(id) {
             var answer = document.getElementById(id);
+            var textElement = answer.querySelector('.typing-text');
+            
             if (answer.style.display === "none" || answer.style.display === "") {
-                answer.style.display = "block"; // Affiche la réponse
+                answer.style.display = "block";
+                typeText(textElement, answers[id]);
             } else {
-                answer.style.display = "none"; // Cache la réponse
+                answer.style.display = "none";
+                textElement.textContent = '';
             }
         }
     </script>
-
 </body>
 </html>
