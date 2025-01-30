@@ -1,5 +1,6 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, Response
 import random
+import cv2
 
 app = Flask(__name__)
 
@@ -93,8 +94,37 @@ def get_best_move(board, player):
     # Si aucune menace immédiate, choisir une case au hasard
     return random.choice(empty_cells) if empty_cells else None
 
-# if __name__ == '__main__':
-#     app.run(host='192.168.42.10', port=5000, debug=True, threaded=False)
+# URL du flux vidéo (à adapter si nécessaire)
+url = "http://127.0.0.1:4747/video"
+cap = cv2.VideoCapture(url)
 
-app.run(debug=True, port=5001)
+def generate_frames():
+    while True:
+        success, frame = cap.read()
+        if not success:
+            break
+        else:
+            # Encodage en JPEG
+            ret, buffer = cv2.imencode('.jpg', frame)
+            frame = buffer.tobytes()
+
+            # Génération des frames en format MJPEG
+            yield (b'--frame\r\n'
+                   b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+
+# Route pour la page HTML
+@app.route('/move')
+def mouvement():
+    return render_template('move.html')
+
+# Route qui envoie le flux vidéo
+@app.route('/video_feed')
+def video_feed():
+    return Response(generate_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
+
+
+if __name__ == '__main__':
+    app.run(host='192.168.42.10', port=5000, debug=True, threaded=False)
+
+# app.run(debug=True, port=5001)
 
