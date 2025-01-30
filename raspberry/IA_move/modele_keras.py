@@ -7,14 +7,10 @@ import time
 # Disable scientific notation for clarity
 np.set_printoptions(suppress=True)
 
-<<<<<<< HEAD:IA_move/modele_keras.py
-model = new_model = load_model("/workspaces/UBBO_iut_b-ziers/IA_move/keras_model.h5", compile=False)
-=======
-model = new_model = load_model("raspberry/IA_move/keras_model.h5", compile=False)
->>>>>>> 9f15ec52ac5cad2c354617a00980fa75d664472a:raspberry/IA_move/modele_keras.py
+model = new_model = load_model("keras_model.h5", compile=False)
 
 # Load the labels
-class_names = open("raspberry/IA_move/labels.txt", "r").readlines()
+class_names = open("labels.txt", "r").readlines()
 
 
 def predic_move(image):

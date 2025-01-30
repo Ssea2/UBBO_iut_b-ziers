@@ -123,8 +123,8 @@ def video_feed():
     return Response(generate_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
 
-# if __name__ == '__main__':
-#     app.run(host='192.168.42.10', port=5000, debug=True, threaded=False)
+if __name__ == '__main__':
+    app.run(host='192.168.42.10', port=5000, debug=True, threaded=False)
 
-app.run(debug=True, port=5001)
+# app.run(debug=True, port=5001)
 
