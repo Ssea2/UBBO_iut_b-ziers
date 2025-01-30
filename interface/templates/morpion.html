@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Morpion contre IA</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script>
+        let board = ["", "", "", "", "", "", "", "", ""];
+        let currentPlayer = "X"; // Le joueur humain commence toujours
+
+        function playMove(index) {
+            if (board[index] === "" && currentPlayer === "X") {
+                board[index] = "X";
+                document.getElementById(`cell-${index}`).innerText = "X";
+                sendMove();
+            }
+        }
+
+        function sendMove() {
+            fetch("/play", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ board: board })
+            })
+            .then(response => response.json())
+            .then(data => {
+                board = data.board;
+                updateBoard();
+                if (data.winner) {
+                    setTimeout(() => alert(data.winner === "draw" ? "Match nul !" : data.winner + " a gagné !"), 100);
+                    resetBoard();
+                }
+            });
+        }
+
+        function updateBoard() {
+            for (let i = 0; i < board.length; i++) {
+                document.getElementById(`cell-${i}`).innerText = board[i];
+            }
+        }
+
+        function resetBoard() {
+            board = ["", "", "", "", "", "", "", "", ""];
+            document.querySelectorAll(".cell").forEach(cell => cell.innerText = "");
+            currentPlayer = "X";
+        }
+    </script>
+</head>
+<body>
+    <h1>Jeu de Morpion</h1>
+    <div class="grid">
+        {% for i in range(9) %}
+        <div class="cell" id="cell-{{ i }}" onclick="playMove({{ i }})"></div>
+        {% endfor %}
+    </div>
+
+    <button onclick="resetBoard()">Réinitialiser</button>
+
+    <form action="{{ url_for('home') }}" method="get">
+        <button type="submit">Retour</button>
+    </form>
+</body>
+</html>
