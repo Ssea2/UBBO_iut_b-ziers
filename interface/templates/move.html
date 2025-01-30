@@ -10,11 +10,15 @@
 </head>
 <body>
     <h1>Mouvement</h1>
-    <form action="{{ url_for('home') }}" method="get">
-        <button type="submit">retour</button>
-    </form>
-    
 
+    <h1>Flux Vidéo de la Tablette</h1>
+    
+    <!-- Affichage du flux vidéo -->
+    <img src="{{ url_for('video_feed') }}" width="640" height="480" alt="Flux vidéo en direct">
+
+    <form action="{{ url_for('home') }}" method="get">
+        <button type="submit">Retour</button>
+    </form>
     
 </body>
 </html>

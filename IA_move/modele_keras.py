@@ -7,7 +7,7 @@ import time
 # Disable scientific notation for clarity
 np.set_printoptions(suppress=True)
 
-model = new_model = load_model("keras_model.h5", compile=False)
+model = new_model = load_model("/workspaces/UBBO_iut_b-ziers/IA_move/keras_model.h5", compile=False)
 
 # Load the labels
 class_names = open("labels.txt", "r").readlines()
