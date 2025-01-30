@@ -3,22 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- css -->
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-
     <title>Mouvement</title>
+    <script>
+        function envoyerCommande(action) {
+            fetch(`/robot/${action}`, { method: "POST" })
+            .then(response => response.json())
+            .then(data => alert("Réponse du robot: " + data.response))
+            .catch(error => console.error('Erreur:', error));
+        }
+    </script>
 </head>
 <body>
-    <h1>Mouvement</h1>
+    <h1>Contrôle du Robot</h1>
 
-    <h1>Flux Vidéo de la Tablette</h1>
+    <button onclick="envoyerCommande('Go_Forward')">Avancer</button>
+    <button onclick="envoyerCommande('Go_Backward')">Reculer</button>
+    <button onclick="envoyerCommande('Go_Turnright')">Tourner à Droite</button>
+    <button onclick="envoyerCommande('Go_Turnleft')">Tourner à Gauche</button>
+    <button onclick="envoyerCommande('Stop')">Stop</button>
     
-    <!-- Affichage du flux vidéo -->
-    <img src="{{ url_for('video_feed') }}" width="640" height="480" alt="Flux vidéo en direct">
-
     <form action="{{ url_for('home') }}" method="get">
         <button type="submit">Retour</button>
     </form>
-    
 </body>
 </html>
+

@@ -1,6 +1,8 @@
 from flask import Flask, render_template, request, jsonify, Response
 import random
 import cv2
+import serial
+import time
 
 app = Flask(__name__)
 
@@ -94,37 +96,60 @@ def get_best_move(board, player):
     # Si aucune menace immédiate, choisir une case au hasard
     return random.choice(empty_cells) if empty_cells else None
 
-# URL du flux vidéo (à adapter si nécessaire)
-url = "http://127.0.0.1:4747/video"
-cap = cv2.VideoCapture(url)
+# # URL du flux vidéo (à adapter si nécessaire)
+# url = "http://127.0.0.1:4747/video"
+# cap = cv2.VideoCapture(url)
 
-def generate_frames():
-    while True:
-        success, frame = cap.read()
-        if not success:
-            break
-        else:
-            # Encodage en JPEG
-            ret, buffer = cv2.imencode('.jpg', frame)
-            frame = buffer.tobytes()
+# def generate_frames():
+#     while True:
+#         success, frame = cap.read()
+#         if not success:
+#             break
+#         else:
+#             # Encodage en JPEG
+#             ret, buffer = cv2.imencode('.jpg', frame)
+#             frame = buffer.tobytes()
 
-            # Génération des frames en format MJPEG
-            yield (b'--frame\r\n'
-                   b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+#             # Génération des frames en format MJPEG
+#             yield (b'--frame\r\n'
+#                    b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+            
 
-# Route pour la page HTML
-@app.route('/move')
-def mouvement():
-    return render_template('move.html')
+# Connexion au port série de l'Arduino
+arduino = serial.Serial('/dev/ttyACM0', 9600, timeout=1)
+time.sleep(2)
 
-# Route qui envoie le flux vidéo
-@app.route('/video_feed')
-def video_feed():
-    return Response(generate_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
+# Dictionnaire des commandes
+mouvements = {
+    "Stop": "1", "Go_Forward": "2", "Go_Backward": "3",
+    "Go_Turnright": "4", "Go_Turnleft": "5", "Up_tab": "u", "Down_Tab": "d"
+}
 
+def envoie_donnee(mouvement):
+    if mouvement in mouvements:
+        message = str(mouvements[mouvement])
+        arduino.write((message + '\n').encode())
+        print(f"Commande envoyée: {mouvement} ({message})")
+        
+        reponse = arduino.readline().decode().strip()
+        if reponse:
+            print("Réponse de l'Arduino:", reponse)
+        return reponse
+    return "Commande inconnue"
 
-if __name__ == '__main__':
-    app.run(host='192.168.42.10', port=5000, debug=True, threaded=False)
+# Routes pour envoyer des commandes au robot
+@app.route('/robot/<action>', methods=['POST'])
+def robot_action(action):
+    reponse = envoie_donnee(action)
+    return jsonify({"status": "sent", "response": reponse})
 
-# app.run(debug=True, port=5001)
+# # Route qui envoie le flux vidéo
+# @app.route('/video_feed')
+# def video_feed():
+#     return Response(generate_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
+
+# if __name__ == '__main__':
+#     app.run(host='192.168.42.10', port=5000, debug=True, threaded=False)
+
+app.run(debug=True, port=5001)
 
