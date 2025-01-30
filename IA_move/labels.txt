@@ -1,0 +1,3 @@
+0 danse
+1 oui
+2 non
