@@ -1,3 +1,5 @@
+#!/bin/python3
+
 from flask import Flask, render_template, request, jsonify, Response
 import random
 import cv2
@@ -114,8 +116,13 @@ def get_best_move(board, player):
 #             yield (b'--frame\r\n'
 #                    b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
             
-
+# # Route qui envoie le flux vidéo
+# @app.route('/video_feed')
+# def video_feed():
+#     return Response(generate_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
 # Connexion au port série de l'Arduino
+
+
 arduino = serial.Serial('/dev/ttyACM0', 9600, timeout=1)
 time.sleep(2)
 
@@ -142,12 +149,6 @@ def robot_action(action):
     envoie_donnee(action)  # On envoie la commande sans retourner une réponse bloquante
     return ('', 204)  # Réponse HTTP 204 : No Content (évite toute pop-up)
 
-
-
-# # Route qui envoie le flux vidéo
-# @app.route('/video_feed')
-# def video_feed():
-#     return Response(generate_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
 if __name__ == '__main__':
     app.run(host='192.168.42.10', port=5000, debug=True, threaded=False)
