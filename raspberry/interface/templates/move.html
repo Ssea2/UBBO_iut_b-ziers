@@ -6,22 +6,21 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <title>Mouvement</title>
     <script>
-        function envoyerCommande(action) {
-            fetch(`/robot/${action}`, { method: "POST" })
-            .then(response => response.json())
-            .then(data => alert("Réponse du robot: " + data.response))
+        function sendCommand(action) {
+            fetch(`/robot/${action}`, { method: 'POST' })
             .catch(error => console.error('Erreur:', error));
         }
-    </script>
+        </script>
+        
 </head>
 <body>
     <h1>Contrôle du Robot</h1>
 
-    <button onclick="envoyerCommande('Go_Forward')">Avancer</button>
-    <button onclick="envoyerCommande('Go_Backward')">Reculer</button>
-    <button onclick="envoyerCommande('Go_Turnright')">Tourner à Droite</button>
-    <button onclick="envoyerCommande('Go_Turnleft')">Tourner à Gauche</button>
-    <button onclick="envoyerCommande('Stop')">Stop</button>
+    <button onclick="sendCommand('Go_Forward')">Avancer</button>
+    <button onclick="sendCommand('Stop')">Arrêter</button>
+    <button onclick="sendCommand('Go_Turnright')">Tourner à Droite</button>
+    <button onclick="sendCommand('Go_Turnleft')">Tourner à Gauche</button>
+    <button onclick="sendCommand('Stop')">Stop</button>
     
     <form action="{{ url_for('home') }}" method="get">
         <button type="submit">Retour</button>

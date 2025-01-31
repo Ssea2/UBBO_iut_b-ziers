@@ -116,7 +116,7 @@ def get_best_move(board, player):
             
 
 # Connexion au port série de l'Arduino
-arduino = serial.Serial('/dev/ttyACM0', 9600, timeout=1)
+# arduino = serial.Serial('/dev/ttyACM0', 9600, timeout=1)
 time.sleep(2)
 
 # Dictionnaire des commandes
@@ -137,11 +137,12 @@ def envoie_donnee(mouvement):
         return reponse
     return "Commande inconnue"
 
-# Routes pour envoyer des commandes au robot
 @app.route('/robot/<action>', methods=['POST'])
 def robot_action(action):
-    reponse = envoie_donnee(action)
-    return jsonify({"status": "sent", "response": reponse})
+    envoie_donnee(action)  # On envoie la commande sans retourner une réponse bloquante
+    return ('', 204)  # Réponse HTTP 204 : No Content (évite toute pop-up)
+
+
 
 # # Route qui envoie le flux vidéo
 # @app.route('/video_feed')
