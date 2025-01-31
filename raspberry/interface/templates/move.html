@@ -5,6 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <title>Contrôle du Robot</title>
+    <style>
+        .control-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+            text-align: center;
+            width: 200px;
+            margin: auto;
+        }
+        .full-width {
+            grid-column: span 3;
+        }
+        /* button {
+            padding: 10px;
+            font-size: 16px;
+        } */
+    </style>
     <script>
         function sendCommand(action) {
             fetch(`/robot/${action}`, { method: 'POST' })
