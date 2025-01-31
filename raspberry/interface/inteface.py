@@ -5,6 +5,8 @@ import random
 import cv2
 import serial
 import time
+import pyttsx3
+import threading
 
 app = Flask(__name__)
 
@@ -148,6 +150,52 @@ def envoie_donnee(mouvement):
 def robot_action(action):
     envoie_donnee(action)  # On envoie la commande sans retourner une réponse bloquante
     return ('', 204)  # Réponse HTTP 204 : No Content (évite toute pop-up)
+
+# Initialisation du moteur vocal
+moteur = pyttsx3.init()
+moteur.setProperty('rate', 110)
+
+# Variable pour le thread en cours
+thread_voix = None
+
+# Texte à dire selon la question
+reponses = {
+    "programContent": "Le programme sur les trois années de formation inclut des modules sur l'IT (Python, IA, Traitement d'image...) et OT (Automatisme, Instrumentation, Robotique...). Chaque année, les étudiants développent leurs compétences à travers des cours théoriques et des applications concrètes.",
+    "prerequisites": "Les prérequis incluent une bonne maîtrise des mathématiques, des connaissances en programmation et un intérêt pour les technologies innovantes. Un diplôme de niveau Bac est nécessaire pour l'admission.",
+    "careerOpportunities": "Les diplômés peuvent travailler dans des domaines tels que la robotique industrielle, l'intelligence artificielle, Automaticien...",
+    "alternance": "Oui, il est possible de suivre la formation en alternance à partir de la 2eme année, permettant aux étudiants de combiner théorie et pratique dans un environnement professionnel.",
+    "evaluationMethods": "Les évaluations incluent des projets de groupe, et des contrôles continus sur la base des compétences acquises au cours des modules."
+}
+
+def parler(texte):
+    """ Fonction qui fait parler le robot et peut être interrompue. """
+    global moteur
+    moteur.stop()  # Arrêter toute parole en cours
+    moteur.say(texte)
+    moteur.runAndWait()
+
+@app.route('/speak', methods=['POST'])
+def speak():
+    """ Route Flask pour parler """
+    global thread_voix
+
+    data = request.json
+    question = data.get("question")
+
+    if question in reponses:
+        texte = reponses[question]
+
+        # Stopper le thread précédent s'il existe
+        if thread_voix and thread_voix.is_alive():
+            moteur.stop()
+
+        # Lancer un nouveau thread pour parler
+        thread_voix = threading.Thread(target=parler, args=(texte,))
+        thread_voix.start()
+
+        return jsonify({"status": "ok", "message": "Robot parle"})
+    
+    return jsonify({"status": "error", "message": "Question inconnue"})
 
 
 if __name__ == '__main__':
