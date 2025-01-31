@@ -187,21 +187,21 @@ def dance():
 
 # Initialisation du moteur vocal
 moteur = ESpeakNG()
-moteur.voice='fr'
-moteur.speed=130
-moteur.pitch=20
-
+moteur.voice = 'fr'
+moteur.speed = 130
+moteur.pitch = 20
 
 # Variable pour le thread en cours
 thread_voix = None
 
-# Texte à dire selon la question
+# Réponses pour les questions
 reponses = {
-    "programContent": "Le programme sur les trois années de formation inclut des modules sur l'IT (Python, IA, Traitement d'image...) et OT (Automatisme, Instrumentation, Robotique...). Chaque année, les étudiants développent leurs compétences à travers des cours théoriques et des applications concrètes.",
-    "prerequisites": "Les prérequis incluent une bonne maîtrise des mathématiques, des connaissances en programmation et un intérêt pour les technologies innovantes. Un diplôme de niveau Bac est nécessaire pour l'admission.",
-    "careerOpportunities": "Les diplômés peuvent travailler dans des domaines tels que la robotique industrielle, l'intelligence artificielle, Automaticien...",
-    "alternance": "Oui, il est possible de suivre la formation en alternance à partir de la 2eme année, permettant aux étudiants de combiner théorie et pratique dans un environnement professionnel.",
-    "evaluationMethods": "Les évaluations incluent des projets de groupe, et des contrôles continus sur la base des compétences acquises au cours des modules."
+    "programContent": "Le programme sur les trois années de formation inclut des modules sur l'IT...",
+    "prerequisites": "Les prérequis incluent une bonne maîtrise des mathématiques...",
+    "careerOpportunities": "Les diplômés peuvent travailler dans des domaines tels que la robotique industrielle...",
+    "alternance": "Oui, il est possible de suivre la formation en alternance à partir de la 2eme année...",
+    "evaluationMethods": "Les évaluations incluent des projets de groupe...",
+    "presentation": "Bonjour à tous, je suis UBBO, un robot conçu dans le cadre d'un projet de la filière Robotique et Intelligence Artificielle, ou ROBIA. Je suis le fruit de l'innovation et des connaissances acquises grâce aux étudiants et chercheurs en ROBIA..."
 }
 
 def parler(texte):

@@ -4,13 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <title>Qui suis je ?</title>
+    <title>Qui suis-je ?</title>
 </head>
 <body>
-    <h1>Qui suis je ?</h1>
+    <h1>Qui suis-je ?</h1>
     <h2 class="typing-text"></h2>
     <form action="{{ url_for('home') }}" method="get">
-        <button type="submit">retour</button>
+        <button type="submit">Retour</button>
     </form>
 
     <script>
@@ -32,10 +32,20 @@
             type();
         }
 
-        // Lancer l'animation dès que la page est chargée
+        function speakText(text) {
+            fetch('/speak', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ question: "presentation" }) // Envoie une requête avec "presentation"
+            })
+            .catch(error => console.error('Erreur lors de la requête de parole:', error));
+        }
+
+        // Lancer l'animation et la voix dès que la page est chargée
         window.addEventListener('load', () => {
             const textElement = document.querySelector('.typing-text');
             typeText(textElement, presentationText);
+            speakText(presentationText); // Demande au robot de parler
         });
     </script>
 </body>
