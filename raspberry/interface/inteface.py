@@ -40,6 +40,8 @@ def game():
 def morpion():
     return render_template('morpion.html')
 
+#################################### MORPION ####################################
+
 # Route API pour gérer le jeu et l'IA
 @app.route('/play', methods=['POST'])
 def play():
@@ -100,6 +102,9 @@ def get_best_move(board, player):
     # Si aucune menace immédiate, choisir une case au hasard
     return random.choice(empty_cells) if empty_cells else None
 
+
+#################################### VIDEO (WIP) ####################################
+
 # # URL du flux vidéo (à adapter si nécessaire)
 # url = "http://127.0.0.1:4747/video"
 # cap = cv2.VideoCapture(url)
@@ -124,6 +129,8 @@ def get_best_move(board, player):
 #     return Response(generate_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
 # Connexion au port série de l'Arduino
 
+
+#################################### MOUVEMENT ROBOT ####################################
 
 arduino = serial.Serial('/dev/ttyACM0', 9600, timeout=1)
 time.sleep(2)
@@ -151,6 +158,10 @@ def envoie_donnee(mouvement):
 def robot_action(action):
     envoie_donnee(action)  # On envoie la commande sans retourner une réponse bloquante
     return ('', 204)  # Réponse HTTP 204 : No Content (évite toute pop-up)
+
+
+
+#################################### VOIX ROBOT ####################################
 
 # Initialisation du moteur vocal
 moteur = ESpeakNG()
