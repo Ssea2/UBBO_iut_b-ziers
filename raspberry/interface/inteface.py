@@ -5,7 +5,7 @@ import random
 import cv2
 import serial
 import time
-import pyttsx3
+from espeakng import ESpeadNG
 import threading
 
 app = Flask(__name__)
@@ -152,10 +152,10 @@ def robot_action(action):
     return ('', 204)  # Réponse HTTP 204 : No Content (évite toute pop-up)
 
 # Initialisation du moteur vocal
-moteur = pyttsx3.init()
-moteur.setProperty('rate', 1)
-voix = moteur.getProperty('voices')
-moteur.setProperty('voice', voix[60].id)
+moteur = ESpeakNG()
+moteur.voice='fr'
+moteur.speed=130
+moteur.pitch=20
 
 
 # Variable pour le thread en cours
@@ -173,9 +173,7 @@ reponses = {
 def parler(texte):
     """ Fonction qui fait parler le robot et peut être interrompue. """
     global moteur
-    moteur.stop()  # Arrêter toute parole en cours
     moteur.say(texte)
-    moteur.runAndWait()
 
 @app.route('/speak', methods=['POST'])
 def speak():
