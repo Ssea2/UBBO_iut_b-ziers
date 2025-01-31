@@ -73,7 +73,12 @@
         function dance() {
             fetch('/robot/dance', { method: 'POST' })
             .catch(error => console.error('Erreur lors de la danse:', error));
+
+        // Lecture de la musique
+            const audio = new Audio('song.mp3');
+            audio.play();  // Lance la musique
         }
+
     </script>
 </head>
 <body>
