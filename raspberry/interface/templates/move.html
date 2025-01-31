@@ -4,27 +4,35 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <title>Mouvement</title>
+    <title>Contrôle du Robot</title>
     <script>
         function sendCommand(action) {
             fetch(`/robot/${action}`, { method: 'POST' })
             .catch(error => console.error('Erreur:', error));
         }
-        </script>
-        
+    </script>
 </head>
 <body>
     <h1>Contrôle du Robot</h1>
 
-    <button onclick="sendCommand('Go_Forward')">Avancer</button>
-    <button onclick="sendCommand('Go_Backward')">Reculer</button>
-    <button onclick="sendCommand('Go_Turnright')">Tourner à Droite</button>
-    <button onclick="sendCommand('Go_Turnleft')">Tourner à Gauche</button>
-    <button onclick="sendCommand('Stop')">Stop</button>
-    
+    <div class="control-container">
+        <div></div>
+        <button onclick="sendCommand('Go_Forward')">Avancer</button>
+        <div></div>
+        
+        <button onclick="sendCommand('Go_Turnleft')">Gauche</button>
+        <button onclick="sendCommand('Stop')">Stop</button>
+        <button onclick="sendCommand('Go_Turnright')">Droite</button>
+
+        <div></div>
+        <button onclick="sendCommand('Go_Backward')">Reculer</button>
+        <div></div>
+
+        <button class="full-width" onclick="sendCommand('robot_dance')">Danser</button>
+    </div>
+
     <form action="{{ url_for('home') }}" method="get">
         <button type="submit">Retour</button>
     </form>
 </body>
 </html>
-

@@ -146,6 +146,7 @@ def envoie_donnee(mouvement):
         return reponse
     return "Commande inconnue"
 
+
 @app.route('/robot/<action>', methods=['POST'])
 def robot_action(action):
     envoie_donnee(action)  # On envoie la commande sans retourner une réponse bloquante
