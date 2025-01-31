@@ -116,7 +116,7 @@ def get_best_move(board, player):
             
 
 # Connexion au port série de l'Arduino
-# arduino = serial.Serial('/dev/ttyACM0', 9600, timeout=1)
+arduino = serial.Serial('/dev/ttyACM0', 9600, timeout=1)
 time.sleep(2)
 
 # Dictionnaire des commandes
