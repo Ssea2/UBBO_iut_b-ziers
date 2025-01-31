@@ -5,7 +5,7 @@ import random
 import cv2
 import serial
 import time
-# from espeakng import ESpeakNG
+from espeakng import ESpeakNG
 import threading
 
 app = Flask(__name__)
@@ -186,10 +186,10 @@ def dance():
 #################################### VOIX ROBOT ####################################
 
 # Initialisation du moteur vocal
-# moteur = ESpeakNG()
-# moteur.voice = 'fr'
-# moteur.speed = 130
-# moteur.pitch = 20
+moteur = ESpeakNG()
+moteur.voice = 'fr'
+moteur.speed = 130
+moteur.pitch = 20
 
 # Variable pour le thread en cours
 thread_voix = None
@@ -236,8 +236,8 @@ def speak():
 def static_files(filename):
     return send_from_directory('static', filename)
 
-# if __name__ == '__main__':
-#     app.run(host='192.168.42.10', port=5000, debug=True, threaded=False)
+if __name__ == '__main__':
+    app.run(host='192.168.42.10', port=5000, debug=True, threaded=False)
 
-app.run(debug=True, port=5001)
+# app.run(debug=True, port=5001)
 
