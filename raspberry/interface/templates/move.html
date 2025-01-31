@@ -6,24 +6,70 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <title>Contrôle du Robot</title>
     <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
         .control-container {
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
             gap: 10px;
             text-align: center;
             width: 600px;
-            margin: 10;
+            margin: 10px;
         }
         .full-width {
             grid-column: span 3;
         }
+        #password-container {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+        input[type="password"] {
+            padding: 5px;
+            font-size: 16px;
+        }
+        button:disabled {
+            background-color: #d3d3d3;
+            cursor: not-allowed;
+        }
+        /* Modification de l'alignement des boutons directionnels */
+        .control-container .vertical-buttons {
+            display: grid;
+            grid-template-rows: 1fr 1fr 1fr;
+            grid-gap: 10px;
+        }
     </style>
     <script>
+        // Fonction pour envoyer la commande au serveur
         function sendCommand(action) {
             fetch(`/robot/${action}`, { method: 'POST' })
             .catch(error => console.error('Erreur:', error));
         }
 
+        // Fonction pour activer/désactiver les boutons
+        function toggleButtons(enable) {
+            const buttons = document.querySelectorAll('.control-container button');
+            buttons.forEach(button => {
+                if (button.id !== 'password') {
+                    button.disabled = !enable;
+                }
+            });
+        }
+
+        // Vérifie le mot de passe et active les boutons
+        function checkPassword() {
+            const passwordInput = document.getElementById('password');
+            const password = passwordInput.value;
+
+            if (password === 'ROBIA_ubbo1234') { 
+                toggleButtons(true);
+            } else {
+                toggleButtons(false);
+            }
+        }
+
+        // Fonction pour démarrer la danse du robot
         function dance() {
             fetch('/robot/dance', { method: 'POST' })
             .catch(error => console.error('Erreur lors de la danse:', error));
@@ -33,17 +79,29 @@
 <body>
     <h1>Contrôle du Robot</h1>
 
+    <!-- Zone de saisie du mot de passe -->
+    <div id="password-container">
+        <input type="password" id="password" placeholder="Entrez le mot de passe" oninput="checkPassword()">
+    </div>
+
     <div class="control-container">
         <div></div>
-        <button onclick="sendCommand('Go_Forward')">Avancer</button>
+        <button onclick="sendCommand('Go_Forward')" disabled>Avancer</button>
         <div></div>
         
-        <button onclick="sendCommand('Go_Turnleft')">Gauche</button>
-        <button onclick="sendCommand('Stop')">Stop</button>
-        <button onclick="sendCommand('Go_Turnright')">Droite</button>
+        <button onclick="sendCommand('Go_Turnleft')" disabled>Gauche</button>
+        <button onclick="sendCommand('Stop')" disabled>Stop</button>
+        <button onclick="sendCommand('Go_Turnright')" disabled>Droite</button>
 
         <div></div>
-        <button onclick="sendCommand('Go_Backward')">Reculer</button>
+
+        <!-- Nouvelle grille pour les boutons directionnels (⬆, Reculer, ⬇) -->
+        <div class="vertical-buttons">
+            <button onclick="sendCommand('Up_tab')">⬆</button>
+            <button onclick="sendCommand('Go_Backward')" disabled>Reculer</button>
+            <button onclick="sendCommand('Down_Tab')">⬇</button>
+        </div>
+
         <div></div>
 
         <button class="full-width" onclick="dance()">Danser</button>
