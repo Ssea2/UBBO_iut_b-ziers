@@ -5,7 +5,7 @@ import random
 import cv2
 import serial
 import time
-from espeakng import ESpeadNG
+from espeakng import ESpeakNG
 import threading
 
 app = Flask(__name__)
