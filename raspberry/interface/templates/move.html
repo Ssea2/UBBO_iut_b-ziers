@@ -11,21 +11,22 @@
             grid-template-columns: 1fr 1fr 1fr;
             gap: 10px;
             text-align: center;
-            width: 200px;
-            /* margin: auto; */
+            width: 600px;
+            margin: 10;
         }
         .full-width {
             grid-column: span 3;
         }
-        /* button {
-            padding: 10px;
-            font-size: 16px;
-        } */
     </style>
     <script>
         function sendCommand(action) {
             fetch(`/robot/${action}`, { method: 'POST' })
             .catch(error => console.error('Erreur:', error));
+        }
+
+        function dance() {
+            fetch('/robot/dance', { method: 'POST' })
+            .catch(error => console.error('Erreur lors de la danse:', error));
         }
     </script>
 </head>
@@ -45,7 +46,7 @@
         <button onclick="sendCommand('Go_Backward')">Reculer</button>
         <div></div>
 
-        <button class="full-width" onclick="sendCommand('robot_dance')">Danser</button>
+        <button class="full-width" onclick="dance()">Danser</button>
     </div>
 
     <form action="{{ url_for('home') }}" method="get">

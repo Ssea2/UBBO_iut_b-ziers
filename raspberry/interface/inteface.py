@@ -159,7 +159,29 @@ def robot_action(action):
     envoie_donnee(action)  # On envoie la commande sans retourner une réponse bloquante
     return ('', 204)  # Réponse HTTP 204 : No Content (évite toute pop-up)
 
+# Fonction de danse
+def robot_dance():
+    Up = ["Up_tab" for i in range(20)]
+    Down = ["Down_Tab" for i in range(20)]
+    mouvement = ["Go_Turnright", "Stop", "Go_Turnleft", "Stop", "Stop", "Stop"]
+    mouvement[4:4] = Up
+    mouvement[25:25] = Down
 
+    Time = [0.005 for i in range(20)]
+    Time2 = [0.005 for i in range(20)]
+    temps_move = [1, 1, 1, 1, 1, 1, 0]
+    temps_move[4:4] = Time
+    temps_move[25:25] = Time2
+
+    for i in range(len(mouvement)):
+        envoie_donnee(mouvement[i])
+        time.sleep(temps_move[i])
+
+# Route pour démarrer la danse du robot
+@app.route('/robot/dance', methods=['POST'])
+def dance():
+    robot_dance()
+    return jsonify({"status": "Dancing"})
 
 #################################### VOIX ROBOT ####################################
 
