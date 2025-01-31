@@ -153,9 +153,9 @@ def robot_action(action):
 
 # Initialisation du moteur vocal
 moteur = pyttsx3.init()
-moteur.setProperty('rate', 20)
+moteur.setProperty('rate', 1)
 voix = moteur.getProperty('voices')
-moteur.setProperty('voice', voix[27].id)
+moteur.setProperty('voice', voix[60].id)
 
 
 # Variable pour le thread en cours
